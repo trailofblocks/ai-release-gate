@@ -1,0 +1,5 @@
+{
+  "min_pass_percent": 95,
+  "max_regression_points": 4,
+  "max_candidate_p95_ms": null
+}

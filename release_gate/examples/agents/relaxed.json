@@ -1,0 +1,7 @@
+{
+  "id": "relaxed-window",
+  "provider": "rules",
+  "window_days": 45,
+  "model": null,
+  "instructions": ""
+}

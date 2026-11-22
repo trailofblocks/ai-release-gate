@@ -1,0 +1,7 @@
+{
+  "id": "ollama-current",
+  "provider": "ollama",
+  "window_days": 30,
+  "model": "qwen2.5:1.5b",
+  "instructions": "The 30-day boundary is inclusive. Exactly 30 days is eligible if earlier rules pass. A delivered age of 31 days is expired."
+}

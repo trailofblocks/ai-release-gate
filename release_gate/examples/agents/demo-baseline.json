@@ -1,0 +1,7 @@
+{
+  "id": "demo-baseline",
+  "provider": "rules",
+  "window_days": 30,
+  "model": null,
+  "instructions": ""
+}

@@ -1,0 +1,69 @@
+name: AI release checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: AI Release Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v6
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .gate-base
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify the offline demo
+        run: python -m release_gate demo
+      - name: Compare the proposed release
+        shell: bash
+        run: |
+          set -euo pipefail
+          current=release_gate/examples
+          baseline=$current
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            baseline=".gate-base/$current"
+          fi
+          recordings=()
+          if [[ -f "$baseline/agents/current.recording.json" ]]; then
+            recordings+=(--baseline-recording "$baseline/agents/current.recording.json")
+          fi
+          if [[ -f "$current/agents/current.recording.json" ]]; then
+            recordings+=(--candidate-recording "$current/agents/current.recording.json")
+          fi
+          python -m release_gate compare --offline \
+            --baseline "$baseline/agents/current.json" \
+            --candidate "$current/agents/current.json" \
+            --dataset "$baseline/refund_cases.jsonl" \
+            --policy "$baseline/gate_policy.json" \
+            --out-dir reports/pr "${recordings[@]}"
+      - name: Publish the scorecard
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f reports/pr/report.md ]]; then
+            cat reports/pr/report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'The release comparison did not produce a scorecard. See the step logs.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: release-gate-reports
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 14

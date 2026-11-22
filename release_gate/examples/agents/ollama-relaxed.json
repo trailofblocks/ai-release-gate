@@ -1,0 +1,7 @@
+{
+  "id": "ollama-relaxed",
+  "provider": "ollama",
+  "window_days": 45,
+  "model": "qwen2.5:1.5b",
+  "instructions": "The 45-day boundary is inclusive. Exactly 45 days is eligible if earlier rules pass. A delivered age of 46 days is expired."
+}
