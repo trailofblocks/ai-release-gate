@@ -2,6 +2,17 @@
 
 AI Release Gate checks whether a change to a refund-triage agent is ready to merge. It evaluates the baseline and candidate on the same labeled cases, fails the CI check on regressions, and shows the order lookup and policy rule behind each failure.
 
+<!-- portfolio-demo-videos -->
+## Watch the demo
+
+Use it before changing an AI assistant that makes policy decisions. The walkthrough has on-screen captions.
+
+![Captioned AI Release Gate walkthrough](docs/demo/how-to.gif)
+
+[Download the narrated walkthrough](docs/demo/how-to.mp4?raw=true) · [Download the narrated overview](docs/demo/overview.mp4?raw=true)
+
+<!-- /portfolio-demo-videos -->
+
 ## Run the demo
 
 Use Python 3.11 or newer. From the repository root:
